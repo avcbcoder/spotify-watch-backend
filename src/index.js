@@ -14,7 +14,7 @@ const {
   SESSION_NAME,
 } = process.env;
 
-const PORT = process.env.PORT || 4001;
+const PORT = process.env.PORT;
 
 var COOKIE_SECRET = SESSION_SECRET;
 var COOKIE_NAME = SESSION_NAME;
