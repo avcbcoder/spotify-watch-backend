@@ -1,6 +1,7 @@
-import spotifyNowPlayingApi from "../spotify/now-playing";
+import spotifyNowPlayingApi from "./spotify/now-playing";
 import { renderToString } from "react-dom/server";
-import Player from "./ui/player";
+import Player from "./now-playing/ui/player";
+
 const fetch = require("node-fetch");
 
 const base64ImageFromUrl = async (imageUrl) => {
@@ -11,20 +12,19 @@ const base64ImageFromUrl = async (imageUrl) => {
   return null;
 };
 
-export default async (req, res, next) => {
+export default async (req, res) => {
   try {
+    console.log("CALLED 4466");
     const username = req.params.id;
-    console.log("CALLED 4466", typeof username);
-
-    if (typeof username !== "string") {
-      throw "error";
-    }
     const { payload } = await spotifyNowPlayingApi(username);
+    console.log("current", payload);
     const { imageUrl } = payload;
+    // res.send(`<img src="${image}" alt="album cover"/>`);
+    // res.send(payload);
 
     const text = renderToString(
       Player({
-        cover: await base64ImageFromUrl(imageUrl),
+        cover: base64ImageFromUrl(imageUrl),
         artist: payload.artist,
         track: payload.title,
         isPlaying: true,
