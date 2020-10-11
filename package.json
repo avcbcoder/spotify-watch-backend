@@ -4,16 +4,52 @@
   "description": "Identifies what an user is playing on spotify",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js --exec babel-node --presets es2015,stage-2",
+    "build": "babel src -d build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/avcbcoder/Now-Playing.git"
   },
-  "author": "",
+  "author": "Ankit Verma",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/avcbcoder/Now-Playing/issues"
   },
-  "homepage": "https://github.com/avcbcoder/Now-Playing#readme"
+  "homepage": "https://github.com/avcbcoder/Now-Playing#readme",
+  "devDependencies": {
+    "babel-plugin-transform-runtime": "^6.23.0"
+  },
+  "engines": {
+    "node": "10.16.3"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "connect": "^3.7.0",
+    "connect-flash": "^0.1.1",
+    "cookie": "^0.4.1",
+    "cookie-parser": "^1.4.5",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "express-socket.io-session": "^1.3.5",
+    "kleur": "^3.0.3",
+    "mongoose": "^5.9.15",
+    "nodemailer": "^6.4.8",
+    "passport": "^0.4.1",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-local": "^1.0.0",
+    "querystring": "^0.2.0",
+    "socket.io": "^2.3.0",
+    "socket.io-express-session": "^0.1.3",
+    "spotify-web-api-node": "^4.0.0"
+  }
 }
