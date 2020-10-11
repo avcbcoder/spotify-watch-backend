@@ -65,6 +65,12 @@ app.use(function (req, res, next) {
 
 app.use(routes);
 
+app.use(express.static(__dirname + '/public'));
+
+app.get('*', function(req, res){
+  res.sendFile(__dirname + '/public/index.html');
+});
+
 // connect to mlab db
 const uri = `mongodb+srv://${DB_USER}:${DB_PASSWORD}@cluster0.gchpc.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(
