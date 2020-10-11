@@ -3,23 +3,28 @@ import qs from "querystring";
 import { config } from "dotenv";
 import UserModel from "../../models/users";
 
+/**
+ * UPDATE : redirect_uri for deployment
+ * 
+ */
+
 config();
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI;
 
 /**
  * @param {authCode} : got in first step
  */
 export default async ({ username, code }) => {
   try {
-    const user = await UserModel.findOne({ username: username });
+    let user = await UserModel.findOne({ username: username });
     if (!user) {
       const newUser = new UserModel({
         username,
       });
       await newUser.save();
+      user = await UserModel.findOne({ username: username });
     }
 
     const spotifyTokenEndpoint = "https://accounts.spotify.com/api/token";
@@ -30,7 +35,6 @@ export default async ({ username, code }) => {
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
     };
-    console.log("error=>" + JSON.stringify(requestBody), { REDIRECT_URI });
     const header = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -60,7 +64,6 @@ export default async ({ username, code }) => {
 
     return { payload: true };
   } catch (error) {
-    console.log(error);
     return { error: true };
   }
 };

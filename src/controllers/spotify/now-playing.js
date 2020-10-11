@@ -1,60 +1,40 @@
-import UserModel from "../../models/users";
-import refreshTokens from "./refresh-token";
 import axios from "axios";
+import getTokens from "./get-tokens";
 
-const getTokens = async (username) => {
-  if (!username) throw "Invalid username";
-  const user = await UserModel.findOne({ username: username });
-  if (!user) throw "Invalid username";
-
-  let tokens = {};
-  const { spotify: oldTokens } = user;
-
-  // refresh needed?
-  const timeElapsed = new Date().getTime() - oldTokens.lastModified; // in millisec
-  const refreshNeeded = timeElapsed > (oldTokens.expiresIn - 10) * 1000;
-
-  if (!refreshNeeded) {
-    tokens = oldTokens;
-  } else {
-    //refresh spotify tokens
-    const { error: refreshError, payload: newTokens } = await refreshTokens(
-      oldTokens
-    );
-    if (refreshError) throw refreshError;
-    tokens = newTokens;
-    // save new tokens to user in background
-    UserModel.updateOne(
-      { username: username },
-      { $set: { spotify: newTokens } }
-    );
-  }
-  return tokens;
-};
-
-const spotifyNowPlayingApi = async ({ accessToken }) => {
-  console.log("access token received", accessToken);
-  const apiEndpoint = `https://api.spotify.com/v1/me/player/currently-playing`;
-  const headers = {
-    Authorization: "Bearer " + accessToken,
+/**
+ * Parse data returned by spotify/currently-playing endpoint
+ */
+const parseResponse = (data) => {
+  const {
+    progress_ms,
+    item: { name, artists: artistsArr, album },
+  } = data;
+  const artistName = artistsArr[0].name;
+  const imageUrl = album.images[1].url;
+  const albumName = album.name;
+  return {
+    progress: progress_ms,
+    title: name,
+    album: albumName,
+    imageUrl,
+    artist: artistName,
   };
-  const { data, error } = await axios.get(apiEndpoint, { headers });
-  console.log("now playing", data, error);
-  return { payload: data };
 };
 
-export default async (req, res) => {
+/**
+ * Hit spotify/currently-playing endpoint using token saved in db
+ */
+export default async (username) => {
   try {
-    const username = req.params.id;
-    // res.send(username).status(200);
     const tokens = await getTokens(username);
-    // console.log("new tokens", tokens);
-    const { payload } = await spotifyNowPlayingApi({
-      accessToken: tokens.accessToken,
-    });
-    res.send(payload);
+    const accessToken = tokens.accessToken;
+    const apiEndpoint = `https://api.spotify.com/v1/me/player/currently-playing`;
+    const headers = {
+      Authorization: "Bearer " + accessToken,
+    };
+    const { data } = await axios.get(apiEndpoint, { headers });
+    return { payload: parseResponse(data) };
   } catch (error) {
-    console.log(error);
-    res.send(error);
+    return { error: "someting went wrong" };
   }
 };

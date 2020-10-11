@@ -1,6 +1,6 @@
 import { Router } from "express";
-import nowPlaying from "../controllers/spotify/now-playing";
-import registerUser from "../controllers/spotify/register-user";
+import nowPlaying from "../controllers/now-playing";
+import registerUser from "../controllers/register-user";
 
 const router = Router();
 
