@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-
+import firstTimeTokens from "./first-time-tokens";
 dotenv.config();
 
 const { CLIENT_ID } = process.env;
@@ -31,12 +31,12 @@ export default async (req, res) => {
       )
       .status(200);
   } else {
-    const { error } = await SpotifyService.firstTimeTokens({ username, code });
+    const { error } = await firstTimeTokens({ username, code });
     if (error) res.send("couldn't connect to spotify, Try again").status(200);
     else {
       res.send("successfully connected to spotify").status(200);
       res.redirect(`https://avc-collab.netlify.app/intro`);
     }
-    console.log("came in 2nd")
+    console.log("came in 2nd");
   }
 };
