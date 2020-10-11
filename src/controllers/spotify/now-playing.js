@@ -1,5 +1,6 @@
 import UserModel from "../../models/users";
 import refreshTokens from "./refresh-token";
+import axios from "axios";
 
 const getTokens = async (username) => {
   if (!username) throw "Invalid username";
@@ -32,24 +33,28 @@ const getTokens = async (username) => {
 };
 
 const spotifyNowPlayingApi = async ({ accessToken }) => {
+  console.log("access token received", accessToken);
   const apiEndpoint = `https://api.spotify.com/v1/me/player/currently-playing`;
   const headers = {
     Authorization: "Bearer " + accessToken,
   };
-  const { data } = await axios.get(apiEndpoint, { headers });
+  const { data, error } = await axios.get(apiEndpoint, { headers });
+  console.log("now playing", data, error);
   return { payload: data };
 };
 
 export default async (req, res) => {
   try {
     const username = req.params.id;
-    res.send(username).status(200);
-    // const tokens = await getTokens(username);
-    // const { payload } = await spotifyNowPlayingApi({
-    //   accessToken: tokens.accessToken,
-    // });
-    // res.send(payload);
+    // res.send(username).status(200);
+    const tokens = await getTokens(username);
+    // console.log("new tokens", tokens);
+    const { payload } = await spotifyNowPlayingApi({
+      accessToken: tokens.accessToken,
+    });
+    res.send(payload);
   } catch (error) {
+    console.log(error);
     res.send(error);
   }
 };

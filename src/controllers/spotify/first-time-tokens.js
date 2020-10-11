@@ -1,6 +1,7 @@
 import axios from "axios";
 import qs from "querystring";
 import { config } from "dotenv";
+import UserModel from "../../models/users";
 
 config();
 
@@ -14,13 +15,18 @@ const REDIRECT_URI = process.env.REDIRECT_URI;
 export default async ({ username, code }) => {
   try {
     const user = await UserModel.findOne({ username: username });
-    if (!user) throw "please login";
+    if (!user) {
+      const newUser = new UserModel({
+        username,
+      });
+      await newUser.save();
+    }
 
     const spotifyTokenEndpoint = "https://accounts.spotify.com/api/token";
     const requestBody = {
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: "https://avc-collab.herokuapp.com/spotify/auth",
+      redirect_uri: "http://localhost:7000/register-user",
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
     };
@@ -51,14 +57,10 @@ export default async ({ username, code }) => {
       { username: username },
       { $set: { spotify: spotifyObj } }
     );
-    await UserModel.updateOne(
-      { username: username },
-      { $set: { spotifyConnected: true } }
-    );
 
     return { payload: true };
   } catch (error) {
-    console.log(error.response);
+    console.log(error);
     return { error: true };
   }
 };

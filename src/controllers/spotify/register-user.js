@@ -23,11 +23,12 @@ export default async (req, res) => {
       .status(200);
   } else {
     const { error } = await firstTimeTokens({ username, code });
-    if (error) res.send("couldn't connect to spotify, Try again").status(200);
+    if (error)
+      res
+        .send("couldn't connect to spotify, Try again" )
+        .status(200);
     else {
       res.send("successfully connected to spotify").status(200);
-      res.redirect(`https://avc-collab.netlify.app/intro`);
     }
-    console.log("came in 2nd");
   }
 };
