@@ -2,15 +2,6 @@ import dotenv from "dotenv";
 import firstTimeTokens from "./first-time-tokens";
 dotenv.config();
 
-const { CLIENT_ID } = process.env;
-const SERVER_BASE_URL = "http://localhost:4001/redr";
-
-const spotifyAuthUrl = () => {
-  return `https://accounts.spotify.com/authorize?
-    client_id=${CLIENT_ID}&
-    redirect_uri=${SERVER_BASE_URL}/connect-spotify/auth&response_type=code&state=${"hey"}`;
-};
-
 export default async (req, res) => {
   const error = req.query.error;
   const code = req.query.code;

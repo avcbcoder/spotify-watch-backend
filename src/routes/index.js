@@ -1,13 +1,10 @@
 import { Router } from "express";
-import ConnectSpotify from "../controllers/connect-spotify";
-import BasePage from "../controllers/base";
+import nowPlaying from "../controllers/spotify/now-playing";
+import registerUser from "../controllers/spotify/register-user";
 
 const router = Router();
 
-router.get("/base", BasePage);
-
-router.get("/connect-spotify", ConnectSpotify);
-
-// router.use("/img", ImgRouter);
+router.get("/register-user", registerUser);
+router.get("now-playing/:id", nowPlaying);
 
 export default router;

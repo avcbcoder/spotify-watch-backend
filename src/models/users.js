@@ -5,15 +5,6 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: false,
-  },
-  spotifyConnected: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
   spotify: {
     type: JSON,
     required: false,

@@ -2,8 +2,10 @@ const BASE_URL = `http://localhost:7000`;
 const CLIENT_ID = `c0f2e448149f4e6fbfc38771d9cfb151`;
 const SCOPES = `user-read-currently-playing user-read-playback-state`;
 
+const REDIRECT_URI = `${BASE_URL}/register-user`;
+
 const spotifyAuthURI = (choosenUsername) =>
-  `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${BASE_URL}/connect-spotify&response_type=code&state=${choosenUsername}&scope=${SCOPES}`;
+  `https://accounts.spotify.com/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code&state=${choosenUsername}&scope=${SCOPES}`;
 
 const initiateSpotifyAuth = () => {
   const input = document.getElementById("choosen-username");

@@ -1,4 +1,5 @@
 import UserModel from "../../models/users";
+import refreshTokens from "./refresh-token";
 
 const getTokens = async (username) => {
   if (!username) throw "Invalid username";
@@ -6,8 +7,7 @@ const getTokens = async (username) => {
   if (!user) throw "Invalid username";
 
   let tokens = {};
-  const { spotifyConnected, spotify: oldTokens } = user;
-  if (!spotifyConnected) throw "please connect your spotify account";
+  const { spotify: oldTokens } = user;
 
   // refresh needed?
   const timeElapsed = new Date().getTime() - oldTokens.lastModified; // in millisec
@@ -44,11 +44,11 @@ export default async (req, res) => {
   try {
     const username = req.params.id;
     res.send(username).status(200);
-    const tokens = await getTokens(username);
-    const { payload } = await spotifyNowPlayingApi({
-      accessToken: tokens.accessToken,
-    });
-    res.send(payload);
+    // const tokens = await getTokens(username);
+    // const { payload } = await spotifyNowPlayingApi({
+    //   accessToken: tokens.accessToken,
+    // });
+    // res.send(payload);
   } catch (error) {
     res.send(error);
   }
