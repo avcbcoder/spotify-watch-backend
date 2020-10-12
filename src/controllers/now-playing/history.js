@@ -17,6 +17,9 @@ const get = async ({ username }) => {
   }
 };
 
+/**
+ * set last played track to history
+ */
 const set = async ({ username, payload: lastPlayedTrack }) => {
   try {
     let user = await UserModel.findOne({ username: username });
@@ -34,3 +37,5 @@ const set = async ({ username, payload: lastPlayedTrack }) => {
     return { error };
   }
 };
+
+export default { get, set };

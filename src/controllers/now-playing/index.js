@@ -11,6 +11,25 @@ const base64ImageFromUrl = async (imageUrl) => {
   return null;
 };
 
+const renderImage = async (res, payload) => {
+  const { imageUrl } = payload;
+
+  res.setHeader("Content-Type", "image/svg+xml");
+  res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
+
+  const text = renderToString(
+    Player({
+      cover: await base64ImageFromUrl(imageUrl),
+      artist: payload.artist,
+      track: payload.title,
+      isPlaying: true,
+      progress: payload.progress,
+      duration: payload.duration,
+    })
+  );
+  res.status(200).send(text);
+};
+
 export default async (req, res, next) => {
   try {
     const username = req.params.id;
