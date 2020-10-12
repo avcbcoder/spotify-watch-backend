@@ -55,7 +55,8 @@ export default async (req, res, next) => {
     } else {
       // if a song is not being played - get payload from history
       const { payload: lastPlayedInHistory } = await History.get({ username });
-      payload = lastPlayedInHistory;
+      if (lastPlayedInHistory)
+        payload = { ...lastPlayedInHistory, isPlaying: false };
     }
 
     // if neither a song is being played nor we have history in db
