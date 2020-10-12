@@ -12,9 +12,9 @@ var _coverImage = require("./cover-image");
 
 var _coverImage2 = _interopRequireDefault(_coverImage);
 
-var _Text = require("./Text");
+var _text = require("./text");
 
-var _Text2 = _interopRequireDefault(_Text);
+var _text2 = _interopRequireDefault(_text);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58,12 +58,12 @@ exports.default = function (_ref) {
           }
         },
         _react2.default.createElement(
-          _Text2.default,
+          _text2.default,
           { id: "track", weight: "bold" },
           ((track || "") + " ").trim()
         ),
         _react2.default.createElement(
-          _Text2.default,
+          _text2.default,
           { id: "artist", color: !track ? "gray" : undefined },
           artist || "Nothing playing..."
         ),

@@ -1,6 +1,6 @@
 import React from "react";
 import CoverImage from "./cover-image";
-import Text from "./Text";
+import Text from "./text";
 
 export default ({ cover, track, artist, progress, duration, isPlaying }) => {
   return (
