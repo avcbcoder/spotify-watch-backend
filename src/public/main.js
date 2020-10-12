@@ -1,4 +1,7 @@
-const BASE_URL = `http://localhost:7000`;
+const IS_DEPLOYED = true;
+const BASE_URL = IS_DEPLOYED
+  ? `https://av-nowplaying.herokuapp.com`
+  : `http://localhost:7000`;
 const CLIENT_ID = `c0f2e448149f4e6fbfc38771d9cfb151`;
 const SCOPES = `user-read-currently-playing user-read-playback-state`;
 

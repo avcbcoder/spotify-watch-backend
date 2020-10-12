@@ -1,3 +1,7 @@
-const REDIRECT_URI = "http://localhost:7000/register-user";
+const IS_DEPLOYED = true;
+const BASE_URL = IS_DEPLOYED
+  ? `https://av-nowplaying.herokuapp.com`
+  : `http://localhost:7000`;
+const REDIRECT_URI = `${BASE_URL}/register-user`;
 
 export { REDIRECT_URI };

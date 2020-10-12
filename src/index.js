@@ -18,7 +18,7 @@ const {
   SESSION_NAME,
 } = process.env;
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 7000;
 
 var COOKIE_SECRET = SESSION_SECRET;
 var COOKIE_NAME = SESSION_NAME;
@@ -65,10 +65,10 @@ app.use(function (req, res, next) {
 
 app.use(routes);
 
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + "/public"));
 
-app.get('*', function(req, res){
-  res.sendFile(__dirname + '/public/index.html');
+app.get("*", function (req, res) {
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 // connect to mlab db
