@@ -2,10 +2,11 @@ import axios from "axios";
 import qs from "querystring";
 import { config } from "dotenv";
 import UserModel from "../../models/users";
+import { REDIRECT_URI } from "../../config";
 
 /**
  * UPDATE : redirect_uri for deployment
- * 
+ *
  */
 
 config();
@@ -31,7 +32,7 @@ export default async ({ username, code }) => {
     const requestBody = {
       grant_type: "authorization_code",
       code: code,
-      redirect_uri: "http://localhost:7000/register-user",
+      redirect_uri: REDIRECT_URI,
       client_id: CLIENT_ID,
       client_secret: CLIENT_SECRET,
     };

@@ -14,11 +14,6 @@ const base64ImageFromUrl = async (imageUrl) => {
 export default async (req, res, next) => {
   try {
     const username = req.params.id;
-    console.log("CALLED 4466", typeof username);
-
-    if (typeof username !== "string") {
-      throw "error";
-    }
     const { payload } = await spotifyNowPlayingApi(username);
     const { imageUrl } = payload;
 
@@ -34,7 +29,6 @@ export default async (req, res, next) => {
     );
     res.status(200).send(text);
   } catch (error) {
-    console.log(error);
     res.send(error);
   }
 };

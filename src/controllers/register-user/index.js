@@ -1,7 +1,4 @@
-import dotenv from "dotenv";
 import firstTimeTokens from "../spotify/first-time-tokens";
-
-dotenv.config();
 
 export default async (req, res) => {
   const { error, code, state } = req.query;
