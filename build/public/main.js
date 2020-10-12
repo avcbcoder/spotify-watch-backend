@@ -1,6 +1,7 @@
 "use strict";
 
-var BASE_URL = "http://localhost:7000";
+var IS_DEPLOYED = true;
+var BASE_URL = IS_DEPLOYED ? "https://av-nowplaying.herokuapp.com" : "http://localhost:7000";
 var CLIENT_ID = "c0f2e448149f4e6fbfc38771d9cfb151";
 var SCOPES = "user-read-currently-playing user-read-playback-state";
 

@@ -48,7 +48,7 @@ var _process$env = process.env,
     SESSION_NAME = _process$env.SESSION_NAME;
 
 
-var PORT = process.env.PORT;
+var PORT = process.env.PORT || 7000;
 
 var COOKIE_SECRET = SESSION_SECRET;
 var COOKIE_NAME = SESSION_NAME;
@@ -95,10 +95,10 @@ app.use(function (req, res, next) {
 
 app.use(_routes2.default);
 
-app.use(_express2.default.static(__dirname + '/public'));
+app.use(_express2.default.static(__dirname + "/public"));
 
-app.get('*', function (req, res) {
-  res.sendFile(__dirname + '/public/index.html');
+app.get("*", function (req, res) {
+  res.sendFile(__dirname + "/public/index.html");
 });
 
 // connect to mlab db
