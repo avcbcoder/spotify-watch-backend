@@ -1,4 +1,4 @@
-const IS_DEPLOYED = false;
+const IS_DEPLOYED = true;
 const BASE_URL = IS_DEPLOYED
   ? `https://av-nowplaying.herokuapp.com`
   : `http://localhost:7000`;

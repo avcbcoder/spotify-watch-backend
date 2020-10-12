@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var IS_DEPLOYED = false;
+var IS_DEPLOYED = true;
 var BASE_URL = IS_DEPLOYED ? "https://av-nowplaying.herokuapp.com" : "http://localhost:7000";
 var REDIRECT_URI = BASE_URL + "/register-user";
 
