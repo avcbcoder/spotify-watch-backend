@@ -19,6 +19,11 @@ var UserSchema = _mongoose2.default.Schema({
     type: JSON,
     required: false,
     default: {}
+  },
+  history: {
+    type: JSON,
+    required: false,
+    default: {}
   }
 });
 
