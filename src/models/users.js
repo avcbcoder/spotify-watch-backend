@@ -10,6 +10,11 @@ const UserSchema = mongoose.Schema({
     required: false,
     default: {},
   },
+  history: {
+    type: JSON,
+    required: false,
+    default: {},
+  },
 });
 
 export default mongoose.model("users", UserSchema);
