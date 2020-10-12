@@ -17,6 +17,9 @@ export default async (req, res, next) => {
     const { payload } = await spotifyNowPlayingApi(username);
     const { imageUrl } = payload;
 
+    res.setHeader("Content-Type", "image/svg+xml");
+    res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
+
     const text = renderToString(
       Player({
         cover: await base64ImageFromUrl(imageUrl),

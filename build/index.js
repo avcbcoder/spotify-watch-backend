@@ -95,10 +95,10 @@ app.use(function (req, res, next) {
 
 app.use(_routes2.default);
 
-app.use(_express2.default.static(__dirname + "/public"));
+app.use(_express2.default.static(__dirname + "/static"));
 
 app.get("*", function (req, res) {
-  res.sendFile(__dirname + "/public/index.html");
+  res.sendFile(__dirname + "/static/index.html");
 });
 
 // connect to mlab db

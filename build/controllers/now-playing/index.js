@@ -82,12 +82,17 @@ exports.default = function () {
             _ref3 = _context2.sent;
             payload = _ref3.payload;
             imageUrl = payload.imageUrl;
+
+
+            res.setHeader("Content-Type", "image/svg+xml");
+            res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
+
             _context2.t0 = _server.renderToString;
             _context2.t1 = _player2.default;
-            _context2.next = 11;
+            _context2.next = 13;
             return base64ImageFromUrl(imageUrl);
 
-          case 11:
+          case 13:
             _context2.t2 = _context2.sent;
             _context2.t3 = payload.artist;
             _context2.t4 = payload.title;
@@ -105,21 +110,21 @@ exports.default = function () {
             text = (0, _context2.t0)(_context2.t8);
 
             res.status(200).send(text);
-            _context2.next = 25;
+            _context2.next = 27;
             break;
 
-          case 22:
-            _context2.prev = 22;
+          case 24:
+            _context2.prev = 24;
             _context2.t9 = _context2["catch"](0);
 
             res.send(_context2.t9);
 
-          case 25:
+          case 27:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2, undefined, [[0, 22]]);
+    }, _callee2, undefined, [[0, 24]]);
   }));
 
   return function (_x2, _x3, _x4) {
