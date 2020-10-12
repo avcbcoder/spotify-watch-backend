@@ -17,3 +17,20 @@ const get = async ({ username }) => {
   }
 };
 
+const set = async ({ username, payload: lastPlayedTrack }) => {
+  try {
+    let user = await UserModel.findOne({ username: username });
+    if (!user) {
+      throw "Invalid username";
+    }
+
+    await UserModel.updateOne(
+      { username: username },
+      { $set: { history: lastPlayedTrack } }
+    );
+
+    return { payload: true };
+  } catch (error) {
+    return { error };
+  }
+};
