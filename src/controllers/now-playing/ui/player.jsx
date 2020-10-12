@@ -1,10 +1,10 @@
 import React from "react";
-import ReadmeImg from "./ReadmeImg";
+import CoverImage from "./cover-image";
 import Text from "./Text";
 
 export default ({ cover, track, artist, progress, duration, isPlaying }) => {
   return (
-    <ReadmeImg width="256" height="64">
+    <CoverImage width="256" height="64">
       <style>
         {`
             .paused { 
@@ -131,6 +131,6 @@ export default ({ cover, track, artist, progress, duration, isPlaying }) => {
           )}
         </div>
       </div>
-    </ReadmeImg>
+    </CoverImage>
   );
 };

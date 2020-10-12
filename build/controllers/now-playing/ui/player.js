@@ -8,9 +8,9 @@ var _react = require("react");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _ReadmeImg = require("./ReadmeImg");
+var _coverImage = require("./cover-image");
 
-var _ReadmeImg2 = _interopRequireDefault(_ReadmeImg);
+var _coverImage2 = _interopRequireDefault(_coverImage);
 
 var _Text = require("./Text");
 
@@ -27,7 +27,7 @@ exports.default = function (_ref) {
       isPlaying = _ref.isPlaying;
 
   return _react2.default.createElement(
-    _ReadmeImg2.default,
+    _coverImage2.default,
     { width: "256", height: "64" },
     _react2.default.createElement(
       "style",
