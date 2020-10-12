@@ -21,6 +21,7 @@ const parseResponse = (data) => {
     progress: progress_ms,
     title: name,
     album: albumName,
+    isPlaying: true,
     imageUrl,
     artist: artistName,
     duration: duration_ms,

@@ -1,6 +1,7 @@
 import spotifyNowPlayingApi from "../spotify/now-playing";
 import { renderToString } from "react-dom/server";
 import Player from "./ui/player";
+import History from "./history";
 const fetch = require("node-fetch");
 
 const base64ImageFromUrl = async (imageUrl) => {
@@ -12,19 +13,27 @@ const base64ImageFromUrl = async (imageUrl) => {
 };
 
 const renderImage = async (res, payload) => {
-  const { imageUrl } = payload;
+  const {
+    imageUrl,
+    artist,
+    title: track,
+    isPlaying,
+    progress,
+    duration,
+  } = payload;
 
   res.setHeader("Content-Type", "image/svg+xml");
   res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate");
 
+  const cover = await base64ImageFromUrl(imageUrl);
   const text = renderToString(
     Player({
-      cover: await base64ImageFromUrl(imageUrl),
-      artist: payload.artist,
-      track: payload.title,
-      isPlaying: true,
-      progress: payload.progress,
-      duration: payload.duration,
+      cover,
+      artist,
+      track,
+      isPlaying,
+      progress,
+      duration,
     })
   );
   res.status(200).send(text);
@@ -39,13 +48,25 @@ export default async (req, res, next) => {
     console.log(payload);
 
     if (parsedTrack) {
+      // if a song is being played - set payload and save to history
       payload = parsedTrack;
-      // save to db
+      // dont use await - since it should be saved in bkg
+      History.set({ username, payload: parsedTrack });
     } else {
-      // get from db
+      // if a song is not being played - get payload from history
+      const { payload: lastPlayedInHistory } = await History.get({ username });
+      payload = lastPlayedInHistory;
     }
 
-    payload = payload || {};
+    // if neither a song is being played nor we have history in db
+    payload = payload || {
+      progress: 40,
+      title: "No track playing",
+      album: "N/A",
+      imageUrl: `https://raw.githubusercontent.com/avcbcoder/avcbcoder/master/images/logo.png`,
+      artist: "N/A",
+      duration: 100,
+    };
 
     await renderImage(res, payload);
   } catch (error) {
