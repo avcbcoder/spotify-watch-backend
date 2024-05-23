@@ -4,11 +4,6 @@ import qs from "querystring";
 import UserModel from "../../models/users";
 import { REDIRECT_URI } from "../../config";
 
-/**
- * UPDATE : redirect_uri for deployment
- *
- */
-
 dotenv.config();
 
 const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
@@ -19,7 +14,6 @@ const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
 export default async ({ username, code }) => {
   try {
     let user = await UserModel.findOne({ username: username });
-    console.log("user in db: ", user);
     if (!user) {
       const newUser = new UserModel({
         username,
@@ -45,7 +39,6 @@ export default async ({ username, code }) => {
       qs.stringify(requestBody),
       header
     );
-    console.log("spotify call result: ", data);
     const newTokens = {
       accessToken: data.access_token,
       expiresIn: data.expires_in,
@@ -53,7 +46,6 @@ export default async ({ username, code }) => {
       lastModified: new Date().getTime(),
       tokenType: data.token_type,
     };
-    console.log("newTokens: ", newTokens);
     // set newTokens to user
     const { spotify } = user;
     const spotifyObj = { ...spotify, ...newTokens };
