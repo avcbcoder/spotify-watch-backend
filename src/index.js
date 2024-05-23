@@ -4,7 +4,8 @@ import cors from "cors";
 // import cookieParser from "cookie-parser";
 // import expressSession from "express-session";
 import http from "http";
-// import routes from "./routes/index.js";
+import routes from "./routes";
+import connectMongo from "./connect_mongo";
 // import from './routes'
 // import bodyParser from "body-parser";
 
@@ -57,13 +58,17 @@ app.use(cors());
 //   next();
 // });
 
-// app.use(routes);
+app.get("/ping", (req, res) => {
+  res.send("pong " + Date.now());
+});
 
-// app.use(express.static(__dirname + "/static"));
+app.use(routes);
+app.use(express.static(__dirname + "/static"));
 
-// app.get("*", function (req, res) {
-//   res.sendFile(__dirname + "/static/index.html");
-// });
+app.get("*", function (req, res) {
+  res.sendFile(__dirname + "/static/index.html");
+});
+connectMongo();
 
 const server = http.Server(app);
 

@@ -4,16 +4,16 @@ import { config } from "dotenv";
 
 config();
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const SPOTIFY_CLIENT_ID = process.env.SPOTIFY_CLIENT_ID;
+const SPOTIFY_CLIENT_SECRET = process.env.SPOTIFY_CLIENT_SECRET;
 
 export default async (currentTokens) => {
   const url = "https://accounts.spotify.com/api/token";
   const requestBody = {
     grant_type: "refresh_token",
     refresh_token: currentTokens.refreshToken,
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
+    client_id: SPOTIFY_CLIENT_ID,
+    client_secret: SPOTIFY_CLIENT_SECRET,
   };
   const header = {
     headers: {

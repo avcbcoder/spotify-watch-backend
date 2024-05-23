@@ -1,4 +1,4 @@
-const IS_DEPLOYED = true;
+const IS_DEPLOYED = false;
 const BASE_URL = IS_DEPLOYED
   ? `https://av-nowplaying.herokuapp.com`
   : `http://localhost:7000`;
@@ -17,6 +17,7 @@ const initiateSpotifyAuth = () => {
 };
 
 window.onload = () => {
+  console.log("cdcjvfmvkfmvlkfmdlkv mlk");
   const spotifyAuthButton = document.getElementById("initiate-auth");
   spotifyAuthButton.onclick = initiateSpotifyAuth;
 };

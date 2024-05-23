@@ -1,6 +1,6 @@
+import dotenv from "dotenv";
 import axios from "axios";
 import qs from "querystring";
-import { config } from "dotenv";
 import UserModel from "../../models/users";
 import { REDIRECT_URI } from "../../config";
 
@@ -9,10 +9,9 @@ import { REDIRECT_URI } from "../../config";
  *
  */
 
-config();
+dotenv.config();
 
-const CLIENT_ID = process.env.CLIENT_ID;
-const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
 
 /**
  * @param {authCode} : got in first step
@@ -20,6 +19,7 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 export default async ({ username, code }) => {
   try {
     let user = await UserModel.findOne({ username: username });
+    console.log("user in db: ", user);
     if (!user) {
       const newUser = new UserModel({
         username,
@@ -27,26 +27,25 @@ export default async ({ username, code }) => {
       await newUser.save();
       user = await UserModel.findOne({ username: username });
     }
-
     const spotifyTokenEndpoint = "https://accounts.spotify.com/api/token";
     const requestBody = {
       grant_type: "authorization_code",
       code: code,
       redirect_uri: REDIRECT_URI,
-      client_id: CLIENT_ID,
-      client_secret: CLIENT_SECRET,
+      client_id: SPOTIFY_CLIENT_ID,
+      client_secret: SPOTIFY_CLIENT_SECRET,
     };
     const header = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };
-
     const { data } = await axios.post(
       spotifyTokenEndpoint,
       qs.stringify(requestBody),
       header
     );
+    console.log("spotify call result: ", data);
     const newTokens = {
       accessToken: data.access_token,
       expiresIn: data.expires_in,
@@ -54,7 +53,7 @@ export default async ({ username, code }) => {
       lastModified: new Date().getTime(),
       tokenType: data.token_type,
     };
-
+    console.log("newTokens: ", newTokens);
     // set newTokens to user
     const { spotify } = user;
     const spotifyObj = { ...spotify, ...newTokens };
@@ -62,9 +61,9 @@ export default async ({ username, code }) => {
       { username: username },
       { $set: { spotify: spotifyObj } }
     );
-
     return { payload: true };
   } catch (error) {
+    console.log(error);
     return { error: true };
   }
 };
