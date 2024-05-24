@@ -40,34 +40,26 @@ const renderImage = async (res, payload) => {
   res.status(200).send(text);
 };
 
-export default async (req, res, next) => {
+const refreshSpotifyTrack = async (username) => {
+  return track;
+};
+
+const getLastTrackFromDb = async (username) => {
+  // if a song is not being played - get payload from history
+  const { payload: track } = await UserService.tracks.getLastPlayedTrack({
+    username,
+  });
+  if (track) {
+    return { ...track, isPlaying: false };
+  }
+  return null;
+};
+
+export default async (req, res) => {
   try {
     const username = req.params.id;
-    let payload = ""; //default
 
-    // const { payload: parsedTrack } = await spotifyNowPlayingApi(username);
-    const { payload: parsedTrack } = await SpotifyService.user.lastPlayedSong(
-      username
-    );
-    console.log(payload);
-
-    if (parsedTrack) {
-      // if a song is being played - set payload and save to history
-      payload = parsedTrack;
-      // dont use await - since it should be saved in bkg
-      // History.set({ username, payload: parsedTrack });
-      UserService.tracks.addToHistory({ username, payload: parsedTrack });
-    } else {
-      // if a song is not being played - get payload from history
-      // const { payload: lastPlayedInHistory } = await History.get({ username });
-      const { payload: lastPlayedInHistory } =
-        await UserService.tracks.getLastPlayedTrack({ username });
-      if (lastPlayedInHistory)
-        payload = { ...lastPlayedInHistory, isPlaying: false };
-    }
-
-    // if neither a song is being played nor we have history in db
-    payload = payload || {
+    let recentTrack = {
       progress: 40,
       title: "No track playing",
       album: "N/A",
@@ -76,7 +68,25 @@ export default async (req, res, next) => {
       duration: 100,
     };
 
-    await renderImage(res, payload);
+    const { payload: spotifyTrack } = await SpotifyService.user.lastPlayedSong(
+      username
+    );
+
+    // if a song is being played - set payload and save to history
+    if (spotifyTrack) {
+      UserService.tracks.addToHistory({
+        username,
+        payload: spotifyTrack,
+      });
+      recentTrack = spotifyTrack;
+    } else {
+      const trackHistory = await UserService.tracks.history({ username });
+      if (trackHistory.length > 0) {
+        recentTrack = trackHistory[0];
+      }
+    }
+
+    await renderImage(res, recentTrack);
   } catch (error) {
     console.log(error);
     res.send(error);

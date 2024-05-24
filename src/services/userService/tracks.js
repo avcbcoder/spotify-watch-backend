@@ -58,9 +58,12 @@ const addToHistory = async ({ username, payload: newTrack }) => {
     trackHistory = trackHistory.slice(0, MAX_TRACKS_IN_HISTORY);
   }
 
-  await UserModel.updateOne({ username }, { $set: { trackHistory } });
+  await UserModel.updateOne(
+    { username },
+    { $set: { trackHistory: trackHistory } }
+  );
 
-  return { payload: true };
+  return trackHistory;
 };
 
 export { getLastPlayedTrack, addToHistory, history };
