@@ -1,4 +1,4 @@
-import firstTimeTokens from "../spotify/first-time-tokens";
+import { SpotifyService } from "../../services";
 
 export default async (req, res) => {
   console.log("request came in /register-user");
@@ -10,11 +10,15 @@ export default async (req, res) => {
   if (error || !code || !state) {
     res.send("unable to connect with spotify, try again! ").status(200);
   } else {
-    const { error } = await firstTimeTokens({ username, code });
+    // const { error } = await firstTimeTokens({ username, code });
+    const { error } =
+      await SpotifyService.tokenExchange.generateFirstTimeTokens({
+        username,
+        code,
+      });
     if (error) res.send("couldn't connect to spotify, Try again").status(200);
     else {
       res.send("successfully connected to spotify").status(200);
     }
   }
-  res.send("don't know");
 };

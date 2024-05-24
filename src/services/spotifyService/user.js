@@ -1,5 +1,6 @@
 import axios from "axios";
-import getTokens from "./get-tokens";
+import UserModel from "../../models/users";
+import * as tokenExchange from "./tokenExchange";
 
 /**
  * Parse data returned by spotify/currently-playing endpoint
@@ -28,10 +29,39 @@ const parseResponse = (data) => {
   };
 };
 
+const getTokens = async (username) => {
+  if (!username) throw "Invalid username";
+  const user = await UserModel.findOne({ username: username });
+  if (!user) throw "Invalid username";
+
+  let tokens = {};
+  const { spotify: oldTokens } = user;
+
+  // refresh needed?
+  const timeElapsed = new Date().getTime() - oldTokens.lastModified; // in millisec
+  const refreshNeeded = timeElapsed > (oldTokens.expiresIn - 10) * 1000;
+
+  if (!refreshNeeded) {
+    tokens = oldTokens;
+  } else {
+    //refresh spotify tokens
+    const { error: refreshError, payload: newTokens } =
+      await tokenExchange.refreshTokens(oldTokens);
+    if (refreshError) throw refreshError;
+    tokens = newTokens;
+    // save new tokens to user in background
+    UserModel.updateOne(
+      { username: username },
+      { $set: { spotify: newTokens } }
+    );
+  }
+  return tokens;
+};
+
 /**
  * Hit spotify/currently-playing endpoint using token saved in db
  */
-export default async (username) => {
+const lastPlayedSong = async (username) => {
   try {
     const tokens = await getTokens(username);
     const accessToken = tokens.accessToken;
@@ -45,3 +75,5 @@ export default async (username) => {
     return { error: "someting went wrong" };
   }
 };
+
+export { lastPlayedSong };

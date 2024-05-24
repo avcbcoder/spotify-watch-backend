@@ -1,7 +1,8 @@
-import spotifyNowPlayingApi from "../spotify/now-playing";
 import { renderToString } from "react-dom/server";
 import Player from "./ui/player";
 import History from "./history";
+import { SpotifyService } from "../../services";
+
 const fetch = require("node-fetch");
 
 const base64ImageFromUrl = async (imageUrl) => {
@@ -44,7 +45,10 @@ export default async (req, res, next) => {
     const username = req.params.id;
     let payload = ""; //default
 
-    const { payload: parsedTrack } = await spotifyNowPlayingApi(username);
+    // const { payload: parsedTrack } = await spotifyNowPlayingApi(username);
+    const { payload: parsedTrack } = await SpotifyService.user.lastPlayedSong(
+      username
+    );
     console.log(payload);
 
     if (parsedTrack) {
