@@ -1,6 +1,6 @@
 import { renderToString } from "react-dom/server";
 import Player from "./ui/player";
-import History from "./history";
+import { UserService } from "../../services";
 import { SpotifyService } from "../../services";
 
 const fetch = require("node-fetch");
@@ -55,10 +55,13 @@ export default async (req, res, next) => {
       // if a song is being played - set payload and save to history
       payload = parsedTrack;
       // dont use await - since it should be saved in bkg
-      History.set({ username, payload: parsedTrack });
+      // History.set({ username, payload: parsedTrack });
+      UserService.tracks.addToHistory({ username, payload: parsedTrack });
     } else {
       // if a song is not being played - get payload from history
-      const { payload: lastPlayedInHistory } = await History.get({ username });
+      // const { payload: lastPlayedInHistory } = await History.get({ username });
+      const { payload: lastPlayedInHistory } =
+        await UserService.tracks.getLastPlayedTrack({ username });
       if (lastPlayedInHistory)
         payload = { ...lastPlayedInHistory, isPlaying: false };
     }
@@ -75,6 +78,7 @@ export default async (req, res, next) => {
 
     await renderImage(res, payload);
   } catch (error) {
+    console.log(error);
     res.send(error);
   }
 };

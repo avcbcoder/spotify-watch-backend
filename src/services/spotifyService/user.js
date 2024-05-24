@@ -8,8 +8,9 @@ import * as tokenExchange from "./tokenExchange";
 const parseResponse = (data) => {
   const {
     progress_ms,
-    item: { name, artists: artistsArr, album, duration_ms },
+    item: { name, artists: artistsArr, album, duration_ms, id: trackId },
   } = data;
+
   const artistName = artistsArr[0].name;
   const albumName = album.name;
 
@@ -26,6 +27,7 @@ const parseResponse = (data) => {
     imageUrl,
     artist: artistName,
     duration: duration_ms,
+    id: trackId,
   };
 };
 

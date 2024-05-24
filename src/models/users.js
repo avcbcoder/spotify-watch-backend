@@ -15,6 +15,11 @@ const UserSchema = mongoose.Schema({
     required: false,
     default: {},
   },
+  trackHistory: {
+    type: Array,
+    required: false,
+    default: [],
+  },
 });
 
 export default mongoose.model("users", UserSchema);
