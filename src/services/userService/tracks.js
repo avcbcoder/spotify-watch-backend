@@ -1,6 +1,6 @@
 import UserModel from "../../models/users";
 
-const MAX_TRACKS_IN_HISTORY = 2;
+const MAX_TRACKS_IN_HISTORY = 5;
 
 /**
  * Get user's track history from the database
