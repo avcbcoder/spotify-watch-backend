@@ -47,7 +47,7 @@ const addToHistory = async ({ username, payload: newTrack }) => {
   const newTrackId = newTrack.id;
 
   if (newTrackId === lastTrackId) {
-    return;
+    return trackHistory;
   }
 
   // add new track to start of array

@@ -15,6 +15,7 @@ const UserSchema = mongoose.Schema({
     required: false,
     default: {},
   },
+  // {id, title, album, artist}
   trackHistory: {
     type: Array,
     required: false,
