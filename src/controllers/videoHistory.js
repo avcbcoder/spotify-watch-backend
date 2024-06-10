@@ -1,4 +1,9 @@
-import { UserService, SpotifyService, YoutubeService } from "../services";
+import {
+  UserService,
+  SpotifyService,
+  YoutubeService,
+  LocalSearchService,
+} from "../services";
 
 export default async (req, res, next) => {
   try {
@@ -23,7 +28,7 @@ export default async (req, res, next) => {
     const videos = [];
 
     for (const { title, album, artist, id } of history) {
-      const video = await YoutubeService.search.videoForSpotifyTrack({
+      const video = await LocalSearchService.search.videoForSpotifyTrack({
         title,
         album,
         artist,

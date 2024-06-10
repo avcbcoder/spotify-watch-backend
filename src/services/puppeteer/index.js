@@ -14,16 +14,16 @@ const puppySearch = async (text) => {
   // Wait for the search results to load
   await page.waitForSelector("#video-title");
 
-  console.log(page);
   // Extract the video ID of the first result
-  const videoId = await page.evaluate(() => {
+  const videoIdText = await page.evaluate(() => {
     return document
       .querySelector("#video-title")
       .getAttribute("href")
       .split("v=")[1];
   });
 
-  console.log("First video ID:", videoId);
+  const videoId = videoIdText.split("&")[0];
+  console.log(`Video for ${searchTerm} : ${videoId}`);
 
   await browser.close();
 
