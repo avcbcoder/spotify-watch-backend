@@ -28,6 +28,7 @@ const parseResponse = (data) => {
     artist: artistName,
     duration: duration_ms,
     id: trackId,
+    when: Date.now(),
   };
 };
 

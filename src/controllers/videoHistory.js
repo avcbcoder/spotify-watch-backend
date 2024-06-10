@@ -27,7 +27,7 @@ export default async (req, res, next) => {
     // parallel execution because runs in parallel
     const videos = [];
 
-    for (const { title, album, artist, id } of history) {
+    for (const { title, album, artist, id, when } of history) {
       const video = await LocalSearchService.search.videoForSpotifyTrack({
         title,
         album,
@@ -40,7 +40,7 @@ export default async (req, res, next) => {
         album,
         artist,
         videoId: video.videoId,
-        views: video.views,
+        when,
       });
     }
 
