@@ -1,7 +1,11 @@
 import puppeteer from "puppeteer";
 
 const puppySearch = async (text) => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({
+    headless: true,
+    executablePath:
+      "/opt/render/.cache/puppeteer/chrome/linux-125.0.6422.78/chrome-linux64/chrome",
+  });
   const page = await browser.newPage();
   const searchTerm = text;
 
