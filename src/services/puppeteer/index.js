@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer";
 
 const puppySearch = async (text) => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: true });
   const page = await browser.newPage();
   const searchTerm = text;
 
