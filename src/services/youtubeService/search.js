@@ -49,13 +49,15 @@ const searchVideoInAwsBackend = async (spotifyTitle, album, spotifyArtist) => {
 const searchVideoInFlask = async function (spotifyTitle, album, spotifyArtist) {
   try {
     const searchQuery = `${spotifyTitle} ${spotifyArtist}`;
+
     const response = await axios.get(
-      `${YT_SEARCH_BASE_URL_PRD}/search_youtube?q=` + searchQuery
+      `${YT_SEARCH_BASE_URL_PRD}/search_youtube?q=` +
+        encodeURIComponent(searchQuery)
     );
     return response.data.video_id;
   } catch (error) {
     console.error("Error fetching video ID:", error);
-    throw error; // Re-throw the error for handling in the calling code
+    return "";
   }
 };
 
