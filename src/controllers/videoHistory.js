@@ -28,7 +28,7 @@ export default async (req, res, next) => {
     const videos = [];
 
     for (const { title, album, artist, id, when } of history) {
-      const video = await LocalSearchService.search.videoForSpotifyTrack({
+      const videoId = await YoutubeService.search.videoForSpotifyTrack({
         title,
         album,
         artist,
@@ -39,7 +39,7 @@ export default async (req, res, next) => {
         title,
         album,
         artist,
-        videoId: video.videoId,
+        videoId: videoId,
         when,
       });
     }

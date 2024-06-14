@@ -4,7 +4,7 @@ import YtSearchCacheModel from "../../models/ytsearchcache";
 
 dotenv.config();
 
-const { YT_SEARCH_BASE_URL } = process.env;
+const { YT_SEARCH_BASE_URL, YT_SEARCH_BASE_URL_PRD } = process.env;
 
 const searchVideoInCache = async (spotifyTrackId) => {
   const ytsearchcache = await YtSearchCacheModel.findOne({
@@ -46,6 +46,19 @@ const searchVideoInAwsBackend = async (spotifyTitle, album, spotifyArtist) => {
   }
 };
 
+const searchVideoInFlask = async function (spotifyTitle, album, spotifyArtist) {
+  try {
+    const searchQuery = `${spotifyTitle} ${spotifyArtist}`;
+    const response = await axios.get(
+      `${YT_SEARCH_BASE_URL_PRD}/search_youtube?q=` + searchQuery
+    );
+    return response.data.video_id;
+  } catch (error) {
+    console.error("Error fetching video ID:", error);
+    throw error; // Re-throw the error for handling in the calling code
+  }
+};
+
 /**
  *
  * @param {*} spotifyTrack
@@ -67,21 +80,19 @@ const videoForSpotifyTrack = async (spotifyTrack) => {
   }
 
   // search in yt search backend
-  const videoInAws = await searchVideoInAwsBackend(
+  const videoIdFromSearch = await searchVideoInFlask(
     trackTitle,
     trackAlbum,
     trackArtist
   );
 
-  if (videoInAws) {
+  if (videoIdFromSearch) {
     const YtSearchCache = new YtSearchCacheModel({
       spotifyTrackId: trackId,
-      videoId: videoInAws.videoId,
-      title: videoInAws.title,
-      views: videoInAws.views,
+      videoId: videoIdFromSearch,
     });
     await YtSearchCache.save();
-    return videoInAws;
+    return videoIdFromSearch;
   }
 
   return {};
